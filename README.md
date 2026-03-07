@@ -4,5 +4,5 @@ Kaggle'dan alınan 'kantesti_global_health_insights_2025_2026' veri seti kullan�
  
 işte yorumladığım bazı bulgular...
 
-https://github.com/meryemmbakirr/global_saglik_analizi/blob/main/images/heat_map.png
 
+<img width="1536" height="762" alt="heatmap_new" src="https://github.com/user-attachments/assets/60aca696-2931-4c8c-8ec5-f65164554fde" />
