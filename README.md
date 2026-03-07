@@ -4,4 +4,5 @@ Kaggle'dan alınan 'kantesti_global_health_insights_2025_2026' veri seti kullan�
  
 işte yorumladığım bazı bulgular...
 
+![Heatmap Analizi](images/heatmap_aggregated.png)
 
