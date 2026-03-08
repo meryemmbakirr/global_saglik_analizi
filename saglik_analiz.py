@@ -93,7 +93,45 @@ plt.xlabel('Sağlık Durumu / Risk Faktörleri', fontsize=12)
 plt.ylabel('Yaş Grupları (%)', fontsize=12)
 
 plt.tight_layout()
-plt.show()
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+#ekleme
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 1. Veriyi yükle
+df = pd.read_csv('kantesti_global_health_insights_2025_2026.csv')
+
+# 2. Bölgelere göre grupla ve Anemi oranlarının ortalamasını al
+anemi_analizi = df.groupby('region')['condition_anemia_pct'].mean().sort_values(ascending=False).reset_index()
+
+# 3. Görselleştirme
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
+
+# Bar grafik çizimi
+ax = sns.barplot(data=anemi_analizi, x='region', y='condition_anemia_pct', palette='OrRd_r')
+
+# Çubukların üzerine tam oranları yazalım (Senin sorduğun rakamlar burada görünecek)
+for i, p in enumerate(ax.patches):
+    ax.annotate(f'%{p.get_height():.2f}', 
+                (p.get_x() + p.get_width() / 2., p.get_height()), 
+                ha='center', va='center', 
+                xytext=(0, 9), 
+                textcoords='offset points', 
+                fontweight='bold', fontsize=12)
+
+plt.title('Bölgelere Göre Anemi (Kansızlık) Yaygınlığı Oranı', fontsize=15, fontweight='bold', pad=20)
+plt.ylabel('Ortalama Anemi Oranı (%)', fontsize=12)
+plt.xlabel('Bölge', fontsize=12)
+plt.ylim(0, 40) # Farkın net görülmesi için üst sınırı 40 yapalım
+
+plt.tight_layout()
+#-----------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 #Bölgesel Sağlık Karnesi - bölgeleri gruplayıp ortalama sağlık puanlarını hesaplamak.
 
@@ -470,36 +508,47 @@ plt.grid(True, linestyle='--', alpha=0.5)
 
 
 #-----------------------------------------------------------------------------
-#Bu analizde, kullanıcıların raporları ne kadar detaylı incelediği (avg_report_pages) ve uygulamayı ne kadar mobil üzerinden kullandıkları ile sağlık sonuçları arasındaki bağı ölçüyoruz.
 import pandas as pd
-import sqlite3
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
-# 1. SQL ile Ürün ve Sağlık Metriklerini Birleştirme
-conn = sqlite3.connect(':memory:')
-df.to_sql('saglik_analizleri', conn, index=False)
+# 1. Veri Hazırlığı
+df = pd.read_csv('kantesti_global_health_insights_2025_2026.csv')
+df = df.sort_values(by=['country_name', 'period'])
 
-sql_ux = """
-SELECT 
-    country_name,
-    AVG(mobile_usage_pct) as avg_mobile_usage,
-    AVG(avg_report_pages) as avg_report_depth,
-    AVG(biomarker_abnormal_rate) as avg_abnormal_rate
-FROM saglik_analizleri
-GROUP BY country_name
-"""
-df_ux = pd.read_sql_query(sql_ux, conn)
+# 2. İyileşme Hızını (Delta) Hesaplama
+# Önemli: Mevcut aydaki etkileşimin, bir sonraki ayki sağlık puanını nasıl değiştirdiğine bakıyoruz.
+df['next_month_health_score'] = df.groupby('country_name')['avg_health_score'].shift(-1)
+df['delta_health_score'] = df['next_month_health_score'] - df['avg_health_score']
 
-# 2. Görselleştirme: Regresyon Analizi
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+# 3. Etkileşim (Engagement) Gruplarını Belirleme
+# Beslenme planı talebi medyan değerin üstünde olanlar "Yüksek Talep", altında olanlar "Düşük Talep"
+median_nutrition = df['nutrition_plan_requested_pct'].median()
+df['nutrition_group'] = np.where(df['nutrition_plan_requested_pct'] > median_nutrition, 'Yüksek Talep', 'Düşük Talep')
 
-# Grafik 1: Mobil Kullanım vs Sağlık Riski
-sns.regplot(data=df_ux, x='avg_mobile_usage', y='avg_abnormal_rate', ax=ax1, color='royalblue')
-ax1.set_title('Mobil Kullanım ve Sağlık Riski İlişkisi', fontweight='bold')
+# 4. Görselleştirme (Boxplot)
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
 
-# Grafik 2: Rapor Detayı (Sayfa Sayısı) vs Sağlık Riski
-sns.regplot(data=df_ux, x='avg_report_depth', y='avg_abnormal_rate', ax=ax2, color='seagreen')
-ax2.set_title('Rapor Derinliği ve Sağlık Riski İlişkisi', fontweight='bold')
+# Analiz: Beslenme planı talebi ile bir sonraki ay gerçekleşen sağlık puanı değişimi (Delta)
+ax = sns.boxplot(data=df.dropna(subset=['delta_health_score']), 
+                x='nutrition_group', y='delta_health_score', 
+                palette='Set2', showmeans=True,
+                meanprops={"marker":"o", "markerfacecolor":"white", "markeredgecolor":"black", "markersize":"10"})
+
+plt.title('Engagement Analizi: Beslenme Planı Talebi vs. İyileşme Hızı (Delta)', fontsize=14, fontweight='bold', pad=15)
+plt.xlabel('Beslenme Planı Talep Segmenti', fontsize=12)
+plt.ylabel('Bir Sonraki Ay Sağlık Puanı Değişimi (Delta)', fontsize=12)
+
+# Analiz notu ekleyelim
+plt.figtext(0.5, -0.05, "Not: Pozitif Delta, sağlık puanının bir sonraki ay yükseldiğini; negatif Delta ise düştüğünü gösterir.", 
+            ha="center", fontsize=10, style='italic')
 
 plt.tight_layout()
+plt.show()
+
+# 5. İstatistiksel Sonuçları Yazdır
+summary = df.dropna(subset=['delta_health_score']).groupby('nutrition_group')['delta_health_score'].mean()
+print(f"--- Gruplara Göre Ortalama İyileşme (Delta) ---")
+print(summary)
