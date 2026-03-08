@@ -2,6 +2,12 @@
 Bu çalışma, dünya genelindeki sağlık verilerini analiz ederek; operasyonel büyüme trendlerini, bölgesel risk faktörlerini ve ürün etkileşiminin (UX) kullanıcı sağlığı üzerindeki etkilerini saptamak amacıyla hazırlanmıştır.
 Kaggle'dan alınan 'kantesti_global_health_insights_2025_2026' veri seti kullanılmıstır.
 
+Bu analizi yapma sürecimde   
+Veriyi sadece yüklemeyi değil; Pandas ile manipüle etmeyi, Scikit-Learn ile makine öğrenmesi modeli (K-Means) kurmayı ve StandardScaler ile veriyi normalize etmeyi öğrendim  
+SQL : LEAD, LAG gibi pencere fonksiyonlarını (Window Functions) kullanarak zaman serisi analizi yaptım. CTE (With) blokları ile karmaşık sorguları organize etmeyi ve Python içinde SQL çalıştırmayı (SQLite) deneyimledim.  
+Görselleştirme: Sadece bar grafik değil; ısı haritaları (Heatmap), regresyon grafikleri (Regplot) ve dağılım grafiklerini (Boxplot) kullandım.
+
+
 # değişkenleri  tanıyalım
 
 country_code: Kod  
