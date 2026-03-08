@@ -1,7 +1,48 @@
-# global saglik analizi ve stratejik icgoru raporu
+# Global saglik analizi ve stratejik icgoru raporu
 Bu çalışma, dünya genelindeki sağlık verilerini analiz ederek; operasyonel büyüme trendlerini, bölgesel risk faktörlerini ve ürün etkileşiminin (UX) kullanıcı sağlığı üzerindeki etkilerini saptamak amacıyla hazırlanmıştır.
 Kaggle'dan alınan 'kantesti_global_health_insights_2025_2026' veri seti kullanılmıstır.
- 
+
+# değişkenleri  tanıyalım
+
+country_code: Kod  
+country_name: Ülke  
+region: Bölge  
+sub_region: Alt-Bölge  
+year: Yıl  
+month: Ay  
+period: Tarih  
+monthly_analyses: Aylık-Test  
+cumulative_analyses: Toplam-Test  
+unique_users: Kullanıcı  
+repeat_user_rate: Sadakat  
+avg_biomarkers_per_test: Parametre-Adedi
+condition_healthy_pct: Sağlıklı  
+condition_cardiovascular_pct: Kalp  
+condition_diabetes_pct: Diyabet  
+condition_metabolic_syndrome_pct: Metabolik  
+condition_anemia_pct: Anemi  
+condition_thyroid_pct: Tiroid  
+condition_vitamin_d_deficiency_pct: Vit-D-Eksikliği  
+condition_vitamin_b12_deficiency_pct: Vit-B12-Eksikliği  
+condition_liver_pct: Karaciğer  
+condition_kidney_pct: Böbrek  
+condition_inflammation_pct: Enflamasyon  
+risk_optimal_pct: İdeal   
+risk_normal_pct: Normal  
+risk_attention_pct: Dikkat  
+risk_elevated_pct: Yüksek  
+risk_critical_pct: Kritik  
+avg_health_score: Sağlık-Puanı  
+avg_cardiovascular_risk_score: Kalp-Skoru  
+avg_metabolic_risk_score: Metabolik-Skor  
+avg_nutrient_score: Besin-Skoru  
+top_abnormal_biomarker_1: Bir-Hatalı  
+top_abnormal_biomarker_2: İki-Hatalı  
+top_abnormal_biomarker_3: Üç-Hatalı  
+avg_biomarkers_out_of_range: Anomali-Adedi  
+biomarker_abnormal_rate: Anomali-Oranı  
+
+
 işte yorumladığım bazı bulgular...
 
 
@@ -46,6 +87,12 @@ Neden? Avrupa'da diyabet ve metabolik sendrom oranları diğer bölgelere göre 
 En "Düşük Skorlu" Bölge: Güney Amerika (71.04)
 Neden? Veride Güney Amerika'daki Anemi (Anemia) oranının (%31.89), Avrupa'nın (%19.08) neredeyse iki katı olduğunu görüyoruz. Bu ciddi bir beslenme veya demir eksikliği sorununa işaret ediyor ve genel sağlık puanını aşağı çekiyor.
 
+# global sağlık karnesi
+<img width="1200" height="700" alt="global sağlık karnesi tüm zamanlar ort" src="https://github.com/user-attachments/assets/746af265-59bb-4b22-9873-14c2e6454e24" />
+İtalya (73.26): Uzun vadede dünyanın en istikrarlı ve sağlıklı profili.  
+Fransa (72.42): İkinci sırada sağlam bir yer edinmiş.  
+Portekiz (72.39): Üçüncü olarak liderlik grubunda.
+Brezilya (71.04): Genel ortalamada listenin sonunda yer alıyor.iyileştirme ihtiyacı olduğunu söyleyebiliriz
 
 # Bölgelerin "Kronik" Sorunları
 <img width="1200" height="700" alt="bölgeleregöre" src="https://github.com/user-attachments/assets/8c08659b-02fc-4022-8421-bcd4c1b12188" />
@@ -55,3 +102,43 @@ Neden? Veride Güney Amerika'daki Anemi (Anemia) oranının (%31.89), Avrupa'nı
 Avrupa'nın En Büyük Sorunu: Vitamin D  
 Kuzey Amerika'nın En Büyük Sorunu: LDL Kolesterol (kötü kolestrol) genellikle yüksek yağlı beslenme ve yaşam tarzıyla ilişkilendirilen bir durum.  
 Güney Amerika'nın En Büyük Sorunu: Ferritin (Demir Deposu) Bir önceki analizdeki yüksek anemi oranını burada "Ferritin" (demir deposu) anomalisiyle doğrulamış oluyoruz. Güney Amerika için en büyük sağlık önerisi "demir takviyesi ve beslenme düzeni" olacaktır.
+
+# Genel Performans Analizi (Tüm Zamanların Ortalaması)
+<img width="1200" height="700" alt="global sağlık karnesi tüm zamanlar ort" src="https://github.com/user-attachments/assets/14577d18-3e28-487b-8350-f94badbe24d9" />
+
+Zirvedekiler (Genel Ortalaması En Yüksek):İtalya (73.26): Uzun vadede dünyanın en istikrarlı ve sağlıklı profili.  
+Fransa (72.42): İkinci sırada sağlam bir yer edinmiş.  
+Portekiz (72.39): Üçüncü olarak liderlik grubunda.  
+Kritik Bölgedekiler (Gelişime En Açık Olanlar):Brezilya (71.04): Genel ortalamada listenin sonunda yer alıyor. Brezilya'daki sorunun geçici olmadığını, kronik bir iyileştirme ihtiyacı olduğunu  söyleyebilirim.
+
+# 
+<img width="1536" height="762" alt="ortalamalarının bölgelerine göre karşılaştırılmasıgüncel" src="https://github.com/user-attachments/assets/d7c5a5f1-cf2f-4ae8-a619-1347903723fe" />
+Analizimde mevsimsel dalgalanmaların etkisini azaltmak ve daha güvenilir bir karşılaştırma yapmak için son ay verisi yerine, her ülkenin tüm dönemlerdeki ortalama performansını bölge ortalamalarıyla kıyasladım
+
+Sıfır Çizgisi: Bu çizgi o ülkenin bulunduğu bölgenin ortalamasını temsil ediyor.
+
+Yeşil Çubuklar: Bölgesindeki diğer ülkelere göre ortalamayı yukarı çeken ülkeler.
+
+Kırmızı Çubuklar: Bölge standartlarına göre sağlık skoru düşük kalan ve "neden?" diye sormamız gereken ülkeler.
+
+
+# ülke sağlık segmentasyonu
+<img width="1536" height="762" alt="ülke saglık segmentasyonu kümeleme analizi" src="https://github.com/user-attachments/assets/b10a0c2a-e3f2-4214-b856-958e22b7ae86" />
+K-Means Kümeleme (Clustering) algoritma grupları oluştururken sadece görseldeki bu iki değişkeni değil, arka planda veri setindeki tüm sütunları (kardiyovasküler risk, yaşlı nüfus oranı vb.) kullanmıştır.  
+United States (ABD), sağlık puanı nispeten yüksek olmasına rağmen diyabet yaygınlığında en tepede yer alarak gruptan ayrışıyor. Bu, ABD'nin sağlık sisteminin verimli ama beslenme/kronik hastalık yönetiminde sorunlu olduğunu gösterir.  
+Yüksek Performans (Sarı X): İtalya ve Fransa düşük diyabet ile referans ülkelerdir.  
+Risk Grubu (Kırmızı Daire): Brezilya ve ABD gibi ülkeler, diyabetle mücadele stratejilerinde müdahaleye ihtiyaç duyan "High-Risk" segmentindedir.  
+Dengeli Grup (Yeşil Kare): Hollanda ve İspanya, sürdürülebilir bir sağlık modeline en yakın, stabil grubu temsil eder.  
+
+# beslenme  planı etkisi
+Puanımızı artırmak için nereye para harcamalıyız?  
+<img width="1200" height="700" alt="beslenme işe yarıyo mu" src="https://github.com/user-attachments/assets/d1db8e0a-5ee1-47fa-863c-0b40b3402146" />
+3 aylık bir "gecikme" (lag) koyarak, bugün atılan bir adımın (diyet planı), 3 ay sonraki kan tahlili sonuçlarına yansıyıp yansımadığını ölçtük.  
+Korelasyon Düşük çıktı  <0.10   
+Beslenme planı talebi ile 3 ay sonraki puanlar arasında doğrudan ve güçlü bir bağ saptanamadı. Bu durum, planların uygulanabilirliğinin düşük olduğunu veya iyileşme için 3 aydan daha uzun bir süreye ihtiyaç duyulduğunu gösteriyor olabilir.
+
+# Engagement (Beslenme Planı) vs. İyileşme Hızı
+
+<img width="1000" height="600" alt="beslenme talebi işe yarıyo mu güncel" src="https://github.com/user-attachments/assets/dfdf27e5-1f48-49ab-93d4-727739cb38c5" />
+Kullanıcıların beslenme planı hizmetine olan ilgisi (Engagement), bir sonraki ayki sağlık skorlarında net bir iyileşme ile sonuçlanıyor. Bu, sunulan beslenme rehberliğinin sadece bir 'ek özellik' değil, sağlık çıktılarını doğrudan pozitif etkileyen bir kaldıraç olduğunu ispatlar.
+
